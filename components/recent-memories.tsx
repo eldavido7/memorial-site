@@ -6,21 +6,21 @@ const recentMemories = [
     id: 1,
     name: "Sarah Johnson",
     relationship: "Daughter",
-    message: "Dad always had the biggest smile and the warmest hugs. He taught me that kindness is the greatest gift you can give to others. I'll carry his love with me always.",
+    message: "Mum always had the biggest smile and the warmest hugs. She taught me that kindness is the greatest gift you can give to others. I'll carry her love with me always.",
     date: "2 hours ago",
   },
   {
     id: 2,
     name: "Michael Chen",
     relationship: "Longtime Friend",
-    message: "John was the kind of friend who would drop everything to help you. I remember when he drove 3 hours just to help me move. That's the kind of person he was - always putting others first.",
+    message: "Nancy was the kind of friend who would drop everything to help you. I remember when she drove 3 hours just to help me move. That's the kind of person she was - always putting others first.",
     date: "5 hours ago",
   },
   {
     id: 3,
     name: "Emily Rodriguez",
     relationship: "Neighbor",
-    message: "Every morning, John would wave from his garden and ask how my family was doing. His genuine care for everyone around him made our neighborhood feel like home.",
+    message: "Every morning, Nancy would wave from her garden and ask how my family was doing. Her genuine care for everyone around her made our neighborhood feel like home.",
     date: "1 day ago",
   }
 ]

@@ -21,7 +21,7 @@ export default function AboutPage() {
             </Button>
             <div className="flex items-center space-x-2">
               <Heart className="h-6 w-6 text-rose-500" />
-              <span className="text-xl font-semibold text-gray-900">About John</span>
+              <span className="text-xl font-semibold text-gray-900">About Nancy</span>
             </div>
           </div>
         </div>

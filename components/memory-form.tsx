@@ -89,7 +89,7 @@ export function MemoryForm() {
               name="message"
               value={formData.message}
               onChange={handleChange}
-              placeholder="Share a special memory, story, or message about John..."
+              placeholder="Share a special memory, story, or message about Nancy..."
               rows={4}
               required
             />

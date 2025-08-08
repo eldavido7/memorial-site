@@ -23,49 +23,49 @@ const memories = [
     id: 2,
     name: "Michael Chen",
     relationship: "Longtime Friend",
-    message: "John was the kind of friend who would drop everything to help you. I remember when he drove 3 hours just to help me move. That's the kind of person he was - always putting others first.",
+    message: "Nancy was the kind of friend who would drop everything to help you. I remember when she drove 3 hours just to help me move. That's the kind of person she was - always putting others first.",
     date: "5 hours ago",
   },
   {
     id: 3,
     name: "Emily Rodriguez",
     relationship: "Neighbor",
-    message: "Every morning, John would wave from his garden and ask how my family was doing. His genuine care for everyone around him made our neighborhood feel like home.",
+    message: "Every morning, Nancy would wave from his garden and ask how my family was doing. Her genuine care for everyone around her made our neighborhood feel like home.",
     date: "1 day ago",
   },
   {
     id: 4,
     name: "David Thompson",
     relationship: "Colleague",
-    message: "Working with John for 20 years was a privilege. He mentored so many of us and always made time to help solve problems. His wisdom and patience made him a natural leader.",
+    message: "Working with Nancy for 20 years was a privilege. She mentored so many of us and always made time to help solve problems. Her wisdom and patience made her a natural leader.",
     date: "2 days ago",
   },
   {
     id: 5,
     name: "Lisa Martinez",
     relationship: "Family Friend",
-    message: "John and Mary welcomed our family with open arms when we moved to the neighborhood. Their kindness and generosity knew no bounds. John will be deeply missed.",
+    message: "Nancy welcomed our family with open arms when we moved to the neighborhood. Her kindness and generosity knew no bounds. Nancy will be deeply missed.",
     date: "3 days ago",
   },
   {
     id: 6,
     name: "Robert Smith",
     relationship: "Brother",
-    message: "My big brother was my hero growing up. He taught me how to ride a bike, throw a baseball, and most importantly, how to be a good man. I'll miss our Sunday phone calls.",
+    message: "My big sister was my hero growing up. She taught me how to ride a bike, throw a baseball, and most importantly, how to be a good man. I'll miss our Sunday phone calls.",
     date: "4 days ago",
   },
   {
     id: 7,
     name: "Jennifer Adams",
     relationship: "Former Student",
-    message: "Mr. Smith coached my softball team in high school. He believed in us when we didn't believe in ourselves. His encouragement helped shape who I am today.",
+    message: "Mrs. Nancy coached my softball team in high school. She believed in us when we didn't believe in ourselves. Her encouragement helped shape who I am today.",
     date: "5 days ago",
   },
   {
     id: 8,
     name: "Mark Wilson",
     relationship: "Volunteer Partner",
-    message: "John and I worked together at the food bank for over 15 years. His dedication to helping others was inspiring. He made every volunteer shift feel meaningful.",
+    message: "Nancy and I worked together at the food bank for over 15 years. Her dedication to helping others was inspiring. She made every volunteer shift feel meaningful.",
     date: "1 week ago",
   }
 ]
@@ -256,7 +256,7 @@ export default function MemoriesPage() {
               <CardContent className="p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">Sharing Guidelines</h3>
                 <div className="text-sm text-gray-600 space-y-2">
-                  <p>• Share your favorite memories of John</p>
+                  <p>• Share your favorite memories of Nancy</p>
                   <p>• Keep messages respectful and appropriate</p>
                   <p>• All submissions are reviewed before posting</p>
                   <p>• Photos can be shared via email</p>

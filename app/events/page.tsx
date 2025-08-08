@@ -72,7 +72,7 @@ export default function EventsPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Memorial Events & Services</h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Join us in celebrating John's life and honoring his memory. All are welcome to attend and share in remembering a wonderful man.
+            Join us in celebrating Nancy's life and honoring his memory. All are welcome to attend and share in remembering a wonderful man.
           </p>
         </div>
 

@@ -1,6 +1,10 @@
+"use client" // Add this at the very top
+
+import { useState } from 'react'
+
 import Image from "next/image"
 import Link from "next/link"
-import { Calendar, Download, Heart, MessageCircle, Users } from 'lucide-react'
+import { Calendar, Download, Heart, MessageCircle, Users, Menu, X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -8,6 +12,8 @@ import { RecentMemories } from "@/components/recent-memories"
 import { MemoryForm } from "@/components/memory-form"
 
 export default function HomePage() {
+    const [isMenuOpen, setMenuOpen] = useState(false)
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Navigation */}
@@ -18,15 +24,41 @@ export default function HomePage() {
               <Heart className="h-6 w-6 text-rose-500" />
               <span className="text-xl font-semibold text-gray-900">In Loving Memory</span>
             </div>
+            
+            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-gray-900 transition-colors">Home</Link>
+       <Link href="/" className="text-gray-700 hover:text-gray-900 transition-colors">Home</Link>
               <Link href="/about" className="text-gray-700 hover:text-gray-900 transition-colors">About</Link>
               <Link href="/gallery" className="text-gray-700 hover:text-gray-900 transition-colors">Gallery</Link>
               <Link href="/memories" className="text-gray-700 hover:text-gray-900 transition-colors">Memories</Link>
-              <Link href="/events" className="text-gray-700 hover:text-gray-900 transition-colors">Events</Link>
-            </div>
+              <Link href="/events" className="text-gray-700 hover:text-gray-900 transition-colors">Events</Link>            </div>
+
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white border-t">
+            <div className="container mx-auto px-4 py-4">
+              <div className="flex flex-col space-y-4">
+                <Link href="/" onClick={() => setMenuOpen(false)} className="py-2 text-gray-700 hover:text-gray-900">Home</Link>
+                <Link href="/about" onClick={() => setMenuOpen(false)} className="py-2 text-gray-700 hover:text-gray-900">About</Link>
+                <Link href="/gallery" onClick={() => setMenuOpen(false)} className="py-2 text-gray-700 hover:text-gray-900">Gallery</Link>
+                <Link href="/memories" onClick={() => setMenuOpen(false)} className="py-2 text-gray-700 hover:text-gray-900">Memories</Link>
+                <Link href="/events" onClick={() => setMenuOpen(false)} className="py-2 text-gray-700 hover:text-gray-900">Events</Link>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
@@ -146,7 +178,7 @@ export default function HomePage() {
         <div className="container mx-auto max-w-2xl">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Share Your Memory</h2>
-            <p className="text-gray-600">Help us celebrate John's life by sharing your favorite memory</p>
+            <p className="text-gray-600">Help us celebrate Nancy's life by sharing your favorite memory</p>
           </div>
           <MemoryForm />
         </div>

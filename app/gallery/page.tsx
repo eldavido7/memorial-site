@@ -24,7 +24,7 @@ const photos = [
     alt: "Wedding Day 1989",
     category: "Wedding",
     year: "1989",
-    description: "John and Mary's wedding day"
+    description: "Nancy's wedding day"
   },
   {
     id: 3,
@@ -40,7 +40,7 @@ const photos = [
     alt: "In the Garden",
     category: "Hobbies",
     year: "2022",
-    description: "John in his beloved garden"
+    description: "Nancy in her beloved garden"
   },
   {
     id: 5,
@@ -80,7 +80,7 @@ const photos = [
     alt: "60th Birthday",
     category: "Celebrations",
     year: "2024",
-    description: "Celebrating John's 60th birthday"
+    description: "Celebrating Nancy's 60th birthday"
   }
 ]
 
@@ -126,7 +126,7 @@ export default function GalleryPage() {
             </Button>
             <div className="flex items-center space-x-2">
               <Heart className="h-6 w-6 text-rose-500" />
-              <span className="text-xl font-semibold text-gray-900">John's Photo Gallery</span>
+              <span className="text-xl font-semibold text-gray-900">Nancy's Photo Gallery</span>
             </div>
             <Button onClick={downloadAll} className="bg-rose-600 hover:bg-rose-700">
               <Download className="mr-2 h-4 w-4" />
@@ -139,7 +139,7 @@ export default function GalleryPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">John's Photo Gallery</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Nancy's Photo Gallery</h1>
           <p className="text-gray-600 mb-6">A collection of cherished memories and moments</p>
           
           {/* Search */}
