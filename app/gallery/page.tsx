@@ -126,7 +126,7 @@ function ImageModal({
                 imageLoading ? 'opacity-0' : 'opacity-100'
               }`}
               priority
-              onLoadingComplete={() => setImageLoading(false)}
+              onLoad={() => setImageLoading(false)}
               onError={() => setImageLoading(false)}
             />
           </div>
@@ -174,7 +174,7 @@ const PhotoCard = React.forwardRef<HTMLDivElement, {
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className={`w-full h-64 object-cover transition-opacity duration-500 cursor-pointer ${loaded ? "opacity-100" : "opacity-0"}`}
             loading="lazy"
-            onLoadingComplete={() => setLoaded(true)}
+            onLoad={() => setLoaded(true)}
             onClick={onView}
           />
           {/* Hover overlay */}
@@ -211,39 +211,36 @@ const PhotoCard = React.forwardRef<HTMLDivElement, {
 PhotoCard.displayName = 'PhotoCard';
 
 export default function GalleryPage() {
-  const { images, fetchImages, loading, hasMore } = useGalleryStore();
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const { images, fetchImages, loading, hasMore, nextCursor } = useGalleryStore();
   const [modalOpen, setModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Initial fetch
   useEffect(() => {
-    if (images.length === 0) fetchImages();
+    console.log('Initial load - images.length:', images.length);
+    if (images.length === 0) {
+      console.log('Fetching initial images...');
+      fetchImages();
+    }
   }, [fetchImages, images.length]);
 
-  // Infinite scroll observer (prefetch early with large rootMargin)
-  const lastImageRef = useCallback(
-    (node: HTMLDivElement) => {
-      if (loading) return;
-      if (observerRef.current) observerRef.current.disconnect();
-
-      observerRef.current = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting && hasMore) {
-            fetchImages();
-          }
-        },
-        {
-          root: null,
-          rootMargin: "1200px 0px", // start fetching before user reaches bottom
-          threshold: 0.01,
-        }
-      );
-
-      if (node) observerRef.current.observe(node);
-    },
-    [loading, hasMore, fetchImages]
-  );
+  // Manual load more function for testing
+  const loadMoreImages = async () => {
+    console.log('Load More clicked - Current state:', { 
+      loading, 
+      hasMore, 
+      imageCount: images.length, 
+      nextCursor 
+    });
+    
+    if (!loading && hasMore) {
+      console.log('Actually fetching more images...');
+      await fetchImages();
+      console.log('Fetch completed');
+    } else {
+      console.log('Skipped fetch - loading:', loading, 'hasMore:', hasMore);
+    }
+  };
 
   // Get the original full-resolution URL by removing Cloudinary optimizations
   const getFullResolutionUrl = (src: string) => {
@@ -374,37 +371,79 @@ export default function GalleryPage() {
           </p>
         </div>
 
+        {/* Debug info and controls
+        <div className="mb-6 p-4 bg-gray-100 rounded-lg">
+          <div className="mb-3 text-sm text-gray-700">
+            <strong>Debug Info:</strong> Images: {images.length} | Loading: {loading ? 'Yes' : 'No'} | Has More: {hasMore ? 'Yes' : 'No'} | Next Cursor: {nextCursor ? 'Yes' : 'No'}
+          </div>
+          <div className="flex gap-3">
+            <Button
+              onClick={loadMoreImages}
+              disabled={loading || !hasMore}
+              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400"
+            >
+              {loading ? 'Loading...' : 'Load More Images'}
+            </Button>
+            <Button
+              onClick={() => {
+                console.log('Manual fetch test');
+                fetchImages();
+              }}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              Force Fetch (Test)
+            </Button>
+            <Button
+              onClick={() => {
+                console.log('Current store state:', { images: images.length, loading, hasMore, nextCursor });
+              }}
+              variant="outline"
+            >
+              Log State
+            </Button>
+          </div>
+        </div> */}
+
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {images.map((photo, idx) => {
-            const isLast = idx === images.length - 1;
-            return (
-              <PhotoCard
-                key={photo.id}
-                id={photo.id}
-                src={photo.src}
-                ref={isLast ? lastImageRef : undefined}
-                onDownload={handleDownload}
-                onView={() => openModal(idx)}
-              />
-            );
-          })}
+          {images.map((photo, idx) => (
+            <PhotoCard
+              key={photo.id}
+              id={photo.id}
+              src={photo.src}
+              onDownload={handleDownload}
+              onView={() => openModal(idx)}
+            />
+          ))}
         </div>
+
+        {/* Load More Button */}
+        {hasMore && (
+          <div className="mt-8 flex justify-center">
+            <Button
+              onClick={loadMoreImages}
+              disabled={loading}
+              className="bg-rose-600 hover:bg-rose-700 disabled:bg-gray-400 px-8 py-3 text-lg"
+            >
+              {loading ? (
+                <div className="flex items-center space-x-2">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                  </div>
+                  <span>Loading More...</span>
+                </div>
+              ) : (
+                <>Load More Photos</>
+              )}
+            </Button>
+          </div>
+        )}
 
         {/* Loading / End states */}
         <div className="mt-8 flex justify-center">
-          {loading && (
-            <div className="flex flex-col items-center space-y-3 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 shadow-sm">
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
-              </div>
-              <p className="text-blue-700 font-medium text-sm">Loading more amazing content...</p>
-            </div>
-          )}
-          
-          {!loading && !hasMore && images.length > 0 && (
+          {!hasMore && images.length > 0 && (
             <div className="flex flex-col items-center space-y-2 p-6 bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl border border-gray-200 shadow-sm">
               <div className="w-8 h-8 text-gray-400 mb-1">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -412,7 +451,14 @@ export default function GalleryPage() {
                 </svg>
               </div>
               <p className="text-gray-600 font-medium text-sm">You've explored it all!</p>
-              <p className="text-gray-400 text-xs">No more content to load</p>
+              <p className="text-gray-400 text-xs">All {images.length} photos loaded</p>
+            </div>
+          )}
+
+          {!loading && images.length === 0 && (
+            <div className="flex flex-col items-center space-y-2 p-6 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200 shadow-sm">
+              <p className="text-yellow-700 font-medium text-sm">No photos found</p>
+              <p className="text-yellow-600 text-xs">Check back later for new content</p>
             </div>
           )}
         </div>
