@@ -10,9 +10,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { RecentMemories } from "@/components/recent-memories"
 import { MemoryForm } from "@/components/memory-form"
+import { useMemoryStore } from "../lib/store"
 
 export default function HomePage() {
   const [isMenuOpen, setMenuOpen] = useState(false)
+
+  const { pagination: memoryPagination, loading: memoriesLoading } = useMemoryStore()
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -120,11 +123,11 @@ export default function HomePage() {
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardHeader>
                 <Calendar className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                <CardTitle className="text-lg">Upcoming Events</CardTitle>
+                <CardTitle className="text-lg">Events</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Service of Songs</p>
-                <p className="text-sm text-gray-500 mb-4">August 15, 2025 at 3:00 PM</p>
+                <p className="text-gray-600 mb-4">Burial Service and Interment</p>
+                <p className="text-sm text-gray-500 mb-4">August 16, 2025 at 10:00 AM</p>
                 <Button asChild variant="outline" size="sm">
                   <Link href="/events">View All Events</Link>
                 </Button>
@@ -137,7 +140,7 @@ export default function HomePage() {
                 <CardTitle className="text-lg">Survived By</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Wife, 3 Children, 7 Grandchildren</p>
+                <p className="text-gray-600 mb-4">5 Children, 2 Daughters-in-law, 1 Son-in-law, and 8 Grandchildren</p>
                 <Button asChild variant="outline" size="sm">
                   <Link href="/about">Learn More</Link>
                 </Button>
@@ -150,8 +153,13 @@ export default function HomePage() {
                 <CardTitle className="text-lg">Memories Shared</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">127 loving memories</p>
-                <Button asChild variant="outline" size="sm">
+                <p className="text-gray-600 mb-4 h-6 flex items-center justify-center">
+                  {memoriesLoading && memoryPagination.total === 0 ? (
+                    <span className="text-sm italic">Loading...</span>
+                  ) : (
+                    `${memoryPagination.total} loving memories`
+                  )}
+                </p>                <Button asChild variant="outline" size="sm">
                   <Link href="/memories">Read All</Link>
                 </Button>
               </CardContent>
@@ -184,6 +192,45 @@ export default function HomePage() {
             <p className="text-gray-600">Help us celebrate Nancy's life by sharing your favorite memory</p>
           </div>
           <MemoryForm />
+        </div>
+      </section>
+
+      {/* Note */}
+      <section className="py-12 px-4 bg-white">
+        <div className="container mx-auto">
+          <div className="max-w-4xl mx-auto">
+            <Card className="text-center bg-rose-50/50 border-rose-200 shadow-sm">
+              <CardHeader>
+                <Heart className="h-8 w-8 text-rose-500 mx-auto mb-2" />
+                <CardTitle className="text-2xl font-bold text-gray-800">
+                  A Note of Appreciation
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-gray-700 leading-relaxed space-y-4 text-left sm:text-center px-6 sm:px-12">
+                <p>Dear Friends and Family,</p>
+                <p>
+                  The family of the late Mama Nancy Nenne Nadah (1943-2025) extends our heartfelt gratitude to everyone who stood by us during this difficult time.
+                </p>
+                <p>
+                  We are deeply touched by the overwhelming love and support shown through your presence at the burial service, your kind words, prayers, floral tributes, donations, and countless acts of kindness. Your support has been a source of comfort and strength to our family.
+                </p>
+                <p>
+                  Mama Nenne's legacy of education, service, and compassion lives on through the many lives she touched, and your presence at her final journey was a beautiful testament to the impact she had on so many people.
+                </p>
+                <p>
+                  We may not be able to thank each of you individually, but please know that every gesture of love and support has been deeply appreciated and will forever remain in our hearts.
+                </p>
+                <p>May God bless you all abundantly for your kindness during our time of loss.</p>
+                <div className="pt-4 text-center">
+                  <p className="italic">With sincere appreciation and gratitude,</p>
+                  <p className="font-semibold mt-2">The Nadah Family</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    (Dr. Dennis Shatima, Mrs. Catherine Jatau, Mr. Mataboyo Nadah, Mrs. Mildred Nadah-Pita, Mr. Fauno B. Nadah, and the entire extended family)
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 

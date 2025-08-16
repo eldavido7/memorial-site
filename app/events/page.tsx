@@ -13,7 +13,7 @@ const events = [
     location: "K64 Karewa GRA, Jimeta, Yola",
     description: "A celebration of Nancy's life with songs, prayers, and shared memories. Join us as we honor her legacy and the joy she brought to our lives.",
     type: "Memorial",
-    livestream: "https://example.com/livestream1",
+    livestream: null,
     status: "upcoming"
   },
   {
@@ -31,11 +31,11 @@ const events = [
     id: 3,
     title: "Burial Service and Interment",
     date: "Saturday, August 16, 2025",
-    time: "10:00 AM - 12:00 PM",
+    time: "10:00 AM",
     location: "Cemetery, Yola",
     description: "Final burial service and interment. Family and close friends are invited to pay their final respects.",
     type: "Burial",
-    livestream: "https://example.com/livestream2",
+    livestream: "https://www.facebook.com/share/1B5fEcrTff/",
     status: "upcoming"
   }
 ]
@@ -108,9 +108,9 @@ export default function EventsPage() {
                     <span className="text-gray-700">{event.location}</span>
                   </div>
                 </div>
-                
+
                 <p className="text-gray-600 leading-relaxed">{event.description}</p>
-                
+
                 <div className="flex flex-wrap gap-3 pt-4">
                   <Button variant="outline" size="sm">
                     <Users className="mr-2 h-4 w-4" />
@@ -125,10 +125,6 @@ export default function EventsPage() {
                       </Link>
                     </Button>
                   )}
-                  <Button variant="outline" size="sm">
-                    <MapPin className="mr-2 h-4 w-4" />
-                    Directions
-                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -148,10 +144,10 @@ export default function EventsPage() {
               <p className="text-gray-600 mb-4">
                 For those unable to attend in person, select services will be live-streamed. Links will be available 30 minutes before each event.
               </p>
-              <ul className="text-sm text-gray-600 space-y-1">
+              {/* <ul className="text-sm text-gray-600 space-y-1">
                 <li>• Memorial Service - December 15th</li>
                 <li>• Memorial Garden Dedication - March 15th</li>
-              </ul>
+              </ul> */}
             </CardContent>
           </Card>
 
@@ -175,7 +171,7 @@ export default function EventsPage() {
         </div>
 
         {/* Contact Information */}
-        <div className="mt-12 text-center">
+        {/* <div className="mt-12 text-center">
           <Card className="max-w-2xl mx-auto">
             <CardHeader>
               <CardTitle>Need More Information?</CardTitle>
@@ -190,7 +186,7 @@ export default function EventsPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
+        </div> */}
       </div>
     </div>
   )
