@@ -150,29 +150,46 @@ export default function AboutPage() {
                   Survived By
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Immediate Family</h4>
-                  <ul className="space-y-1 text-gray-600">
-                    <li>Husband</li>
-                    <li>Children</li>
-                    <li>Grandchildren</li>
-                    <li>Great-grandchildren</li>
+                  <h4 className="font-semibold text-gray-900 mb-2">Children</h4>
+                  <ul className="space-y-1 text-gray-600 list-disc list-inside">
+                    <li>Dr. Denis Richard Shatima (Son)</li>
+                    <li>Mrs. Catherine Macdonald Jatau (Daughter)</li>
+                    <li>Mr. Mataboyo Samson Nadah (Son)</li>
+                    <li>Mrs. Mildred Nadah Pita (Daughter)</li>
+                    <li>Mr. Fauno B. Nadah (Son)</li>
                   </ul>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Daughters-in-law</h4>
+                    <ul className="space-y-1 text-gray-600 list-disc list-inside">
+                      <li>Hauwa Nadah</li>
+                      <li>Chafari Shatima Dennis</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Son-in-law</h4>
+                    <ul className="space-y-1 text-gray-600 list-disc list-inside">
+                      <li>Prof. Justin Simon Pita</li>
+                    </ul>
+                  </div>
                 </div>
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-2">Grandchildren</h4>
-                  <ul className="space-y-1 text-gray-600">
-                    <li>Alex & Jamie Johnson</li>
-                    <li>Tyler & Madison Smith</li>
-                    <li>Olivia, Ethan & Sophia Davis</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Siblings</h4>
-                  <ul className="space-y-1 text-gray-600">
-                    <li>Robert Smith (Brother)</li>
-                    <li>Linda Wilson (Sister)</li>
+                  <ul className="space-y-1 text-gray-600 list-disc list-inside columns-2 sm:columns-3">
+                    <li>Lidua Mac-Donald Jatau</li>
+                    <li>Mrs. Mamla Felix Elam</li>
+                    <li>Payema Jatau</li>
+                    <li>Peshirya</li>
+                    <li>Mivanyi</li>
+                    <li>Atsaktiya</li>
+                    <li>Pwaveno</li>
+                    <li>Ledapwa</li>
+                    <li>Adniel</li>
+                    <li>Ivan</li>
+                    <li>Nouria</li>
                   </ul>
                 </div>
               </CardContent>
@@ -210,7 +227,7 @@ export default function AboutPage() {
                   <Link href="/gallery">View Photo Gallery</Link>
                 </Button>
                 <Button asChild variant="outline" className="w-full">
-                  <Link href="/events">Upcoming Events</Link>
+                  <Link href="/events">Events</Link>
                 </Button>
               </CardContent>
             </Card>

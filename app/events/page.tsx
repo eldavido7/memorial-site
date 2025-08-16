@@ -14,21 +14,21 @@ const events = [
     description: "A celebration of Nancy's life with songs, prayers, and shared memories. Join us as we honor her legacy and the joy she brought to our lives.",
     type: "Memorial",
     livestream: null,
-    status: "upcoming"
+    status: "ended"
   },
+  // {
+  //   id: 2,
+  //   title: "Wake Keeping",
+  //   date: "Friday, August 15, 2025",
+  //   time: "7:00 PM - 8:00 PM",
+  //   location: "K64 Karewa GRA, Jimeta, Yola",
+  //   description: "Family and friends are invited to keep vigil and share memories of our beloved Nancy.",
+  //   type: "Visitation",
+  //   livestream: null,
+  //   status: "ended"
+  // },
   {
     id: 2,
-    title: "Wake Keeping",
-    date: "Friday, August 15, 2025",
-    time: "7:00 PM - 8:00 PM",
-    location: "K64 Karewa GRA, Jimeta, Yola",
-    description: "Family and friends are invited to keep vigil and share memories of our beloved Nancy.",
-    type: "Visitation",
-    livestream: null,
-    status: "upcoming"
-  },
-  {
-    id: 3,
     title: "Burial Service and Interment",
     date: "Saturday, August 16, 2025",
     time: "10:00 AM",
@@ -36,7 +36,7 @@ const events = [
     description: "Final burial service and interment. Family and close friends are invited to pay their final respects.",
     type: "Burial",
     livestream: "https://www.facebook.com/share/1B5fEcrTff/",
-    status: "upcoming"
+    status: "ended"
   }
 ]
 
@@ -88,8 +88,20 @@ export default function EventsPage() {
                       {event.type}
                     </Badge>
                   </div>
-                  <Badge variant={event.status === "upcoming" ? "default" : "secondary"}>
-                    {event.status === "upcoming" ? "Upcoming" : "Planned"}
+                  <Badge
+                    variant={
+                      event.status === "upcoming"
+                        ? "default"
+                        : event.status === "ended"
+                          ? "outline"
+                          : "secondary"
+                    }
+                  >
+                    {event.status === "upcoming"
+                      ? "Upcoming"
+                      : event.status === "ended"
+                        ? "Ended"
+                        : "Planned"}
                   </Badge>
                 </div>
               </CardHeader>

@@ -529,25 +529,28 @@ export default function TributesPage() {
                         {tributes.map((tribute) => (
                             <Card key={tribute.id} className="border-slate-200 hover:shadow-md transition-shadow">
                                 <CardContent className="p-6">
-                                    <div className="flex items-start gap-4">
-                                        <Avatar className="h-12 w-12 border-2 border-rose-100">
+                                    {/* Header: Contains Avatar, Name, and Relationship */}
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <Avatar className="h-12 w-12 border-2 border-rose-100 flex-shrink-0">
                                             <AvatarFallback className="bg-rose-50 text-rose-700 font-semibold">
                                                 {getInitials(tribute.name)}
                                             </AvatarFallback>
                                         </Avatar>
 
                                         <div className="flex-1">
-                                            <div className="flex items-center gap-3 mb-2">
+                                            {/* This part handles the Name/Badge responsiveness */}
+                                            <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-3">
                                                 <h4 className="font-semibold text-slate-900">{tribute.name}</h4>
-                                                <Badge variant="secondary" className="bg-rose-50 text-rose-700 border-rose-200">
+                                                <Badge variant="secondary" className="bg-rose-50 text-rose-700 border-rose-200 h-auto whitespace-normal text-center">
                                                     {tribute.relationship}
                                                 </Badge>
                                             </div>
-
-                                            <div className="text-slate-700 leading-relaxed space-y-4">
-                                                {tribute.message}
-                                            </div>
                                         </div>
+                                    </div>
+
+                                    {/* Body: The message, now outside the initial flex layout */}
+                                    <div className="text-slate-700 leading-relaxed text-justify space-y-4">
+                                        {tribute.message}
                                     </div>
                                 </CardContent>
                             </Card>
