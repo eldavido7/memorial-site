@@ -12,7 +12,7 @@ import { RecentMemories } from "@/components/recent-memories"
 import { MemoryForm } from "@/components/memory-form"
 
 export default function HomePage() {
-    const [isMenuOpen, setMenuOpen] = useState(false)
+  const [isMenuOpen, setMenuOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -24,14 +24,16 @@ export default function HomePage() {
               <Heart className="h-6 w-6 text-rose-500" />
               <span className="text-xl font-semibold text-gray-900">In Loving Memory</span>
             </div>
-            
+
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6">
-       <Link href="/" className="text-gray-700 hover:text-gray-900 transition-colors">Home</Link>
+              <Link href="/" className="text-gray-700 hover:text-gray-900 transition-colors">Home</Link>
               <Link href="/about" className="text-gray-700 hover:text-gray-900 transition-colors">About</Link>
               <Link href="/gallery" className="text-gray-700 hover:text-gray-900 transition-colors">Gallery</Link>
               <Link href="/memories" className="text-gray-700 hover:text-gray-900 transition-colors">Memories</Link>
-              <Link href="/events" className="text-gray-700 hover:text-gray-900 transition-colors">Events</Link>            </div>
+              <Link href="/tributes" className="text-gray-700 hover:text-gray-900 transition-colors">Tributes</Link>
+              <Link href="/events" className="text-gray-700 hover:text-gray-900 transition-colors">Events</Link>
+            </div>
 
             {/* Mobile Menu Button */}
             <Button
@@ -54,6 +56,7 @@ export default function HomePage() {
                 <Link href="/about" onClick={() => setMenuOpen(false)} className="py-2 text-gray-700 hover:text-gray-900">About</Link>
                 <Link href="/gallery" onClick={() => setMenuOpen(false)} className="py-2 text-gray-700 hover:text-gray-900">Gallery</Link>
                 <Link href="/memories" onClick={() => setMenuOpen(false)} className="py-2 text-gray-700 hover:text-gray-900">Memories</Link>
+                <Link href="/tributes" onClick={() => setMenuOpen(false)} className="py-2 text-gray-700 hover:text-gray-900">Tributes</Link>
                 <Link href="/events" onClick={() => setMenuOpen(false)} className="py-2 text-gray-700 hover:text-gray-900">Events</Link>
               </div>
             </div>
@@ -80,7 +83,7 @@ export default function HomePage() {
               "A life well lived leaves beautiful memories behind"
             </p>
           </div>
-          
+
           <div className="flex flex-wrap justify-center gap-4 mb-8">
             <Badge variant="secondary" className="px-4 py-2 text-sm">
               Beloved Mother

@@ -1,74 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
-import { ArrowLeft, Heart, MessageCircle, Search } from 'lucide-react'
+import { ArrowLeft, Heart, MessageCircle, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { MemoryForm } from "@/components/memory-form"
 import { Pagination } from "@/components/pagination"
-
-const memories = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    relationship: "Daughter",
-    message: "Dad always had the biggest smile and the warmest hugs. He taught me that kindness is the greatest gift you can give to others. I'll carry his love with me always.",
-    date: "2 hours ago",
-  },
-  {
-    id: 2,
-    name: "Michael Chen",
-    relationship: "Longtime Friend",
-    message: "Nancy was the kind of friend who would drop everything to help you. I remember when she drove 3 hours just to help me move. That's the kind of person she was - always putting others first.",
-    date: "5 hours ago",
-  },
-  {
-    id: 3,
-    name: "Emily Rodriguez",
-    relationship: "Neighbor",
-    message: "Every morning, Nancy would wave from his garden and ask how my family was doing. Her genuine care for everyone around her made our neighborhood feel like home.",
-    date: "1 day ago",
-  },
-  {
-    id: 4,
-    name: "David Thompson",
-    relationship: "Colleague",
-    message: "Working with Nancy for 20 years was a privilege. She mentored so many of us and always made time to help solve problems. Her wisdom and patience made her a natural leader.",
-    date: "2 days ago",
-  },
-  {
-    id: 5,
-    name: "Lisa Martinez",
-    relationship: "Family Friend",
-    message: "Nancy welcomed our family with open arms when we moved to the neighborhood. Her kindness and generosity knew no bounds. Nancy will be deeply missed.",
-    date: "3 days ago",
-  },
-  {
-    id: 6,
-    name: "Robert Smith",
-    relationship: "Brother",
-    message: "My big sister was my hero growing up. She taught me how to ride a bike, throw a baseball, and most importantly, how to be a good man. I'll miss our Sunday phone calls.",
-    date: "4 days ago",
-  },
-  {
-    id: 7,
-    name: "Jennifer Adams",
-    relationship: "Former Student",
-    message: "Mrs. Nancy coached my softball team in high school. She believed in us when we didn't believe in ourselves. Her encouragement helped shape who I am today.",
-    date: "5 days ago",
-  },
-  {
-    id: 8,
-    name: "Mark Wilson",
-    relationship: "Volunteer Partner",
-    message: "Nancy and I worked together at the food bank for over 15 years. Her dedication to helping others was inspiring. She made every volunteer shift feel meaningful.",
-    date: "1 week ago",
-  }
-]
+import { useMemoryStore } from "../../lib/store" // Adjust path as needed
 
 const relationships = ["All", "Family", "Friend", "Colleague", "Neighbor", "Community"]
 
@@ -77,25 +18,113 @@ export default function MemoriesPage() {
   const [selectedRelationship, setSelectedRelationship] = useState("All")
   const [showForm, setShowForm] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const memoriesPerPage = 10
 
-  const filteredMemories = memories.filter(memory => {
-    const matchesSearch = memory.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         memory.name.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesRelationship = selectedRelationship === "All" || 
-                               memory.relationship.toLowerCase().includes(selectedRelationship.toLowerCase())
-    return matchesSearch && matchesRelationship
-  })
+  const {
+    memories,
+    pagination,
+    loading,
+    error,
+    fetchMemories,
+    fetchedPages
+  } = useMemoryStore()
 
-  // Add pagination logic
-  const totalPages = Math.ceil(filteredMemories.length / memoriesPerPage)
-  const startIndex = (currentPage - 1) * memoriesPerPage
-  const paginatedMemories = filteredMemories.slice(startIndex, startIndex + memoriesPerPage)
+  // Initial fetch - ensures we have a full page of memories and prevents infinite loops.
+  useEffect(() => {
+    console.log('useEffect triggered:', {
+      memoriesLength: memories.length,
+      hasNext: pagination.hasNext,
+      loading,
+      fetchedPage1: fetchedPages.has(1)
+    });
+
+    // Fetch under two conditions:
+    // 1. There are no memories at all AND we haven't fetched page 1 yet.
+    // 2. There's a small number of memories (from homepage) AND the store indicates there are more pages available.
+    if ((memories.length > 0 && memories.length <= 3 && pagination.hasNext) || (memories.length === 0 && !fetchedPages.has(1))) {
+      if (!loading) {
+        console.log('About to fetch memories');
+        // Force fetch to overwrite the partial data from the homepage.
+        fetchMemories(1, 10, true)
+      }
+    }
+  }, [memories.length, pagination.hasNext, loading, fetchMemories, fetchedPages])
+
+  // Fetch new pages when currentPage changes
+  useEffect(() => {
+    if (currentPage > 1 && !fetchedPages.has(currentPage) && !loading) {
+      fetchMemories(currentPage, 10)
+    }
+  }, [currentPage, fetchedPages, loading, fetchMemories])
+
+  // Filter memories based on search and relationship
+  const filteredMemories = useMemo(() => {
+    return memories.filter((memory) => {
+      const matchesSearch =
+        memory.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        memory.name.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesRelationship =
+        selectedRelationship === "All" ||
+        memory.relationship.toLowerCase().includes(selectedRelationship.toLowerCase())
+      return matchesSearch && matchesRelationship
+    })
+  }, [memories, searchTerm, selectedRelationship])
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1)
   }, [searchTerm, selectedRelationship])
+
+  // Calculate filtered pagination for client-side filtering
+  const filteredPagination = useMemo(() => {
+    const itemsPerPage = 10
+    const totalFiltered = filteredMemories.length
+    const totalPages = Math.ceil(totalFiltered / itemsPerPage)
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    const currentPageMemories = filteredMemories.slice(startIndex, endIndex)
+
+    return {
+      memories: currentPageMemories,
+      totalPages,
+      total: totalFiltered,
+      hasNext: currentPage < totalPages,
+      hasPrev: currentPage > 1,
+    }
+  }, [filteredMemories, currentPage])
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
+
+    if (diffInHours < 1) return "Just now"
+    if (diffInHours < 24) return `${diffInHours} hours ago`
+    if (diffInHours < 48) return "1 day ago"
+    if (diffInHours < 168) return `${Math.floor(diffInHours / 24)} days ago`
+    return `${Math.floor(diffInHours / 168)} weeks ago`
+  }
+
+  // Calculate statistics
+  const memoryStats = useMemo(() => {
+    const familyCount = memories.filter(
+      (m) =>
+        m.relationship.toLowerCase().includes("family") ||
+        m.relationship.toLowerCase().includes("daughter") ||
+        m.relationship.toLowerCase().includes("brother") ||
+        m.relationship.toLowerCase().includes("sister") ||
+        m.relationship.toLowerCase().includes("son")
+    ).length
+
+    const friendsCount = memories.filter((m) =>
+      m.relationship.toLowerCase().includes("friend")
+    ).length
+
+    const colleaguesCount = memories.filter((m) =>
+      m.relationship.toLowerCase().includes("colleague")
+    ).length
+
+    return { familyCount, friendsCount, colleaguesCount }
+  }, [memories])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -113,10 +142,7 @@ export default function MemoriesPage() {
               <MessageCircle className="h-6 w-6 text-rose-500" />
               <span className="text-xl font-semibold text-gray-900">Memories</span>
             </div>
-            <Button 
-              onClick={() => setShowForm(!showForm)}
-              className="bg-rose-600 hover:bg-rose-700"
-            >
+            <Button onClick={() => setShowForm(!showForm)} className="bg-rose-600 hover:bg-rose-700">
               <Heart className="mr-2 h-4 w-4" />
               Share Memory
             </Button>
@@ -129,14 +155,21 @@ export default function MemoriesPage() {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Memories & Condolences</h1>
           <p className="text-gray-600 mb-6">
-            {filteredMemories.length} loving memories shared by family and friends
-            {totalPages > 1 && (
-              <span className="text-sm text-gray-500 block mt-1">
-                Showing {startIndex + 1}-{Math.min(startIndex + memoriesPerPage, filteredMemories.length)} of {filteredMemories.length}
-              </span>
+            {loading && memories.length === 0 ? (
+              "Loading memories..."
+            ) : (
+              <>
+                {filteredPagination.total} loving memories shared by family and friends
+                {filteredPagination.totalPages > 1 && (
+                  <span className="text-sm text-gray-500 block mt-1">
+                    Page {currentPage} of {filteredPagination.totalPages}
+                    {searchTerm || selectedRelationship !== "All" ? " (filtered)" : ""}
+                  </span>
+                )}
+              </>
             )}
           </p>
-          
+
           {/* Search */}
           <div className="max-w-md mx-auto mb-6">
             <div className="relative">
@@ -169,43 +202,97 @@ export default function MemoriesPage() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Memories List */}
           <div className="lg:col-span-2">
-            <div className="space-y-6">
-              {paginatedMemories.map((memory) => (
-                <Card key={memory.id} className="hover:shadow-md transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-4">
-                      {/* <Avatar className="h-12 w-12">
-                        <AvatarImage src={memory.avatar || "/placeholder.svg"} alt={memory.name} />
-                        <AvatarFallback>{memory.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar> */}
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <div>
-                            <h4 className="font-semibold text-gray-900">{memory.name}</h4>
-                            <p className="text-sm text-gray-500">{memory.relationship}</p>
-                          </div>
-                          <span className="text-xs text-gray-400">{memory.date}</span>
+            {/* Skeleton loading for initial load */}
+            {loading && memories.length === 0 && (
+              <div className="space-y-6">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Card key={i} className="animate-pulse">
+                    <CardContent className="p-6">
+                      <div className="flex items-start space-x-4">
+                        <div className="flex-1 space-y-2">
+                          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                          <div className="h-3 bg-gray-200 rounded w-1/6"></div>
+                          <div className="h-4 bg-gray-200 rounded w-full"></div>
+                          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                         </div>
-                        <p className="text-gray-700 leading-relaxed">{memory.message}</p>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
 
-            {paginatedMemories.length === 0 && filteredMemories.length === 0 && (
+            {error && (
+              <div className="text-center py-12">
+                <p className="text-red-500 text-lg">Error: {error}</p>
+                <Button onClick={() => fetchMemories(1, 10, true)} className="mt-4">
+                  Try Again
+                </Button>
+              </div>
+            )}
+
+            {!loading && !error && memories.length > 0 && (
+              <div className="space-y-6">
+                {filteredPagination.memories.map((memory) => (
+                  <Card key={memory.id} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-6">
+                      <div className="flex items-start space-x-4">
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <div>
+                              <h4 className="font-semibold text-gray-900">{memory.name}</h4>
+                              <p className="text-sm text-gray-500">{memory.relationship}</p>
+                            </div>
+                            <span className="text-xs text-gray-400">{formatDate(memory.createdAt)}</span>
+                          </div>
+                          <p className="text-gray-700 leading-relaxed">{memory.message}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+
+            {!loading && !error && memories.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">No memories have been shared yet.</p>
+                <p className="text-gray-400 text-sm mt-2">Be the first to share a memory of Nancy.</p>
+              </div>
+            )}
+
+            {!loading && !error && filteredPagination.memories.length === 0 && memories.length > 0 && (
               <div className="text-center py-12">
                 <p className="text-gray-500 text-lg">No memories found matching your criteria.</p>
               </div>
             )}
 
-            {filteredMemories.length > 0 && (
+            {!loading && !error && filteredPagination.totalPages > 1 && (
               <Pagination
                 currentPage={currentPage}
-                totalPages={totalPages}
+                totalPages={filteredPagination.totalPages}
                 onPageChange={setCurrentPage}
               />
+            )}
+
+            {/* Loading indicator for additional pages */}
+            {loading && memories.length > 0 && (
+              <div className="space-y-6">
+                {[1, 2].map((i) => (
+                  <Card key={`loading-${i}`} className="animate-pulse">
+                    <CardContent className="p-6">
+                      <div className="flex items-start space-x-4">
+                        <div className="flex-1 space-y-2">
+                          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                          <div className="h-3 bg-gray-200 rounded w-1/6"></div>
+                          <div className="h-4 bg-gray-200 rounded w-full"></div>
+                          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             )}
           </div>
 
@@ -219,37 +306,31 @@ export default function MemoriesPage() {
             )}
 
             {/* Memory Stats */}
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">Memory Statistics</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Total Memories</span>
-                    <span className="font-semibold">{memories.length}</span>
+            {memories.length > 0 && (
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-gray-900 mb-4">Memory Statistics</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Total Memories</span>
+                      <span className="font-semibold">{pagination.total || memories.length}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Family Members</span>
+                      <span className="font-semibold">{memoryStats.familyCount}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Friends</span>
+                      <span className="font-semibold">{memoryStats.friendsCount}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Colleagues</span>
+                      <span className="font-semibold">{memoryStats.colleaguesCount}</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Family Members</span>
-                    <span className="font-semibold">
-                      {memories.filter(m => m.relationship.toLowerCase().includes('family') || 
-                                          m.relationship.toLowerCase().includes('daughter') ||
-                                          m.relationship.toLowerCase().includes('brother')).length}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Friends</span>
-                    <span className="font-semibold">
-                      {memories.filter(m => m.relationship.toLowerCase().includes('friend')).length}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Colleagues</span>
-                    <span className="font-semibold">
-                      {memories.filter(m => m.relationship.toLowerCase().includes('colleague')).length}
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Guidelines */}
             <Card>

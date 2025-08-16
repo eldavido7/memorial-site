@@ -30,13 +30,13 @@ export default function AboutPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-           <Image
-                        src="/IMG-20250807-WA0035.jpg"
-                        alt="Memorial Portrait"
-                        width={300}
-                        height={300}
-                        className="rounded-full mx-auto mb-6 shadow-lg border-4 border-white object-cover"
-                      />
+          <Image
+            src="/IMG-20250807-WA0035.jpg"
+            alt="Memorial Portrait"
+            width={300}
+            height={300}
+            className="rounded-full mx-auto mb-6 shadow-lg border-4 border-white object-cover"
+          />
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Mrs Nancy Nenne Nadah</h1>
           <p className="text-xl text-gray-600">1943 - 2025</p>
         </div>
@@ -54,17 +54,75 @@ export default function AboutPage() {
               </CardHeader>
               <CardContent className="prose prose-gray max-w-none">
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  Mrs Nancy Nenne Nadah, 82, of Yola, Adamawa State, passed away peacefully on [Date], 2025, surrounded by her loving family. Born in 1943, Nancy was a devoted wife, mother, grandmother, and pillar of her community who touched the lives of everyone she met.
+                  Mama Nancy Nenne Nadah, fondly remembered as "Mama Nenne" by
+                  colleagues,
+                  "Nana" by her grandchildren, and "Madam" by her extended
+                  family, was a pioneering Nigerian educationist and librarian whose life's work
+                  shaped generations of learners and leaders. She peacefully passed away in
+                  her sleep on Saturday, July 26, 2025, at her home in Yola, Adamawa State.
                 </p>
+                <h1 className="text-gray-700 font-semibold mb-2">Early Life and Education</h1>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  Nancy was known for her unwavering faith, generous spirit, and dedication to her family. She was a woman of strong character who instilled values of love, respect, and hard work in all who knew her. Her home was always open to family and friends, and her warm hospitality was legendary.
+                  Born in 1943 into the Leha family of Tagombali, Demsa Local Government
+                  Area, Adamawa State, Mama Nenne's early years were marked by an
+                  unwavering passion for education. She attended primary school in Bile before
+                  earning a Grade II Certificate in Education at Teachers College, Maiduguri,
+                  Borno State in 1969. Her journey into the teaching profession began at Kano
+                  Teachers' College, where she obtained her National Certificate in Education in
+                  1972. She later advanced her academic pursuits with a Bachelor of Science
+                  degree in Library Science from Ahmadu Bello University, Zaria, in 1976.
                 </p>
+                <h1 className="text-gray-700 font-semibold mb-2">Professional Career</h1>
+
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  Throughout her life, Nancy was actively involved in her community and church, always ready to lend a helping hand to those in need. Her wisdom, kindness, and gentle nature made her a beloved figure in her community.
+                  Mama Nenne began her career as Head Teacher at Teachers College,
+                  Numan in 1972, where she rose to the position of Vice-Principal and inspired
+                  many who went on to become prominent professionals and leaders. In 1979,
+                  she made history as the first Librarian of the then Gongola State House of
+                  Assembly (1979-1983) and later advanced to the position of Director of Library
+                  Services at the State Ministry of Education between 1984-1989.
+                  Mama Nadah served as the founding Director of Professional Services at the
+                  newly created State Library Board—her brainchild. In this capacity, she
+                  developed a network of libraries across Adamawa State, leaving an enduring
+                  legacy of knowledge accessibility to local communities and the state capital.
+                  She was an active professional member of the Nigerian Library Association
+                  and served as its Treasurer.
+                  Mama Nadah attended several management development programs at home
+                  and abroad with the Bureau of Public Service Reforms, UNESCO, Centre for
+                  Management Development, and ASCON.
+                  Her career later took her to the National Library of Nigeria, where she rose to
+                  the position of Acting Director of the Bibliographic Control Department, a role
+                  in which she contributed significantly to the nation's archival and bibliographic
+                  infrastructure before retiring in 2006.
+
                 </p>
+                <h1 className="text-gray-700 font-semibold mb-2">Personal Life and Cultural Heritage
+                </h1>
+
                 <p className="text-gray-700 leading-relaxed">
-                  Nancy's legacy lives on through her children, grandchildren, and the countless lives she touched with her love and compassion. She will be deeply missed but never forgotten.
+                  A woman of remarkable intellect and cultural fluency, Mama Nenne
+                  spoke English, Bali, Bachama, Babur, Bile, Hausa, and Fulfulde fluently.
+                  Her professional and personal travels took her to the United Kingdom,
+                  Hong Kong, Israel, Italy, the United States, Côte d'Ivoire, and many other
+                  countries, broadening her worldview and enriching her cultural insights.
+                  She was the beloved wife of the late Samson Nadah, a prince of the Bachama
+                  Kingdom, respected businessman, and politician. She was blessed with five
+                  children: Dr. Dennis Shatima, Mrs. Catherine Jatau, Mr. Mataboyo Nadah,
+                  Mrs. Mildred Nadah-Pita, and Mr. Fauno B. Nadah, along with numerous other
+                  children whose lives she touched through mentorship, education, and personal
+                  guidance.
                 </p>
+                <h1 className="text-gray-700 font-semibold mb-2">Legacy</h1>
+                <p className="text-gray-700 leading-relaxed">
+                  Mama Nenne's legacy lives on in the countless students, colleagues, and
+                  community members whose lives she impacted through her dedication,
+                  wisdom, and compassion. Her life was a testament to service, education, and
+                  the empowerment of others. Through her pioneering work in establishing
+                  library systems across Adamawa State and her contributions to Nigeria's
+                  national bibliographic infrastructure, she helped democratize access to
+                  knowledge and information for generations of Nigerians.
+                </p>
+
               </CardContent>
             </Card>
 

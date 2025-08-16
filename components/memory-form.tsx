@@ -1,41 +1,68 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Heart } from 'lucide-react'
+import { Heart } from "lucide-react"
+import { useMemoryStore } from "../lib/store" // Adjust path as needed
 
 export function MemoryForm() {
   const [formData, setFormData] = useState({
     name: "",
     relationship: "",
-    message: ""
+    message: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const { addMemory } = useMemoryStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-    setFormData({ name: "", relationship: "", message: "" })
-    
-    // Reset success message after 3 seconds
-    setTimeout(() => setIsSubmitted(false), 3000)
+    setError(null)
+
+    try {
+      const response = await fetch("/api/memories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Failed to submit memory")
+      }
+
+      const newMemory = await response.json()
+
+      // Add the new memory to the store immediately
+      addMemory(newMemory)
+
+      setIsSubmitted(true)
+      setFormData({ name: "", relationship: "", message: "" })
+
+      // Reset success message after 3 seconds
+      setTimeout(() => setIsSubmitted(false), 3000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }))
   }
 
@@ -94,11 +121,12 @@ export function MemoryForm() {
               required
             />
           </div>
-          <Button 
-            type="submit" 
-            className="w-full bg-rose-600 hover:bg-rose-700"
-            disabled={isSubmitting}
-          >
+          {error && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-red-600 text-sm">{error}</p>
+            </div>
+          )}
+          <Button type="submit" className="w-full bg-rose-600 hover:bg-rose-700" disabled={isSubmitting}>
             {isSubmitting ? "Sharing Memory..." : "Share Memory"}
           </Button>
         </form>
